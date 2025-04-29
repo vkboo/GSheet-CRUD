@@ -61,6 +61,7 @@ export async function GET(
         await db.load()
         const docs = await db.find(query);
         return new Response(JSON.stringify(docs));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         return new Response(
             JSON.stringify(error.response.data.error),
