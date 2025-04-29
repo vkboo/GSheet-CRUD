@@ -40,5 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# .temp dir for google service account
+.temp/
+
 # google service account
-google-serviceaccount.json
+/google-serviceaccount.json
