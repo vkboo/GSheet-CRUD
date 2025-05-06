@@ -10,7 +10,11 @@ type Params = {
 };
 
 async function getServiceAccountPath() {
-    const tempDir = path.join(process.cwd(), '.temp');
+    if (process.env.NODE_ENV === 'development') {
+        return path.join(process.cwd(), 'google-serviceaccount.json');
+    }
+
+    const tempDir = path.join('/tmp', '.temp');
     const tempFilePath = path.join(tempDir, 'google-serviceaccount.json');
 
     try {
@@ -61,7 +65,7 @@ export async function GET(
         await db.load()
         const docs = await db.find(query);
         return new Response(JSON.stringify(docs));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         return new Response(
             JSON.stringify(error.response.data.error),
