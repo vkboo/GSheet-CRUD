@@ -9,6 +9,10 @@ type Params = {
     sheet_name: string[];
 };
 
+interface Document {
+    [key: string]: unknown;
+}
+
 async function getServiceAccountPath() {
     if (process.env.NODE_ENV === 'development') {
         return path.join(process.cwd(), 'google-serviceaccount.json');
@@ -36,16 +40,131 @@ const getCommonDbConfig = async () => ({
     keyFile: await getServiceAccountPath(),
 });
 
-export async function POST() {
-    return new Response("Hello, world!");
+async function createDatabase(doc_id: string, sheet_name?: string[]) {
+    const commonDbConfig = await getCommonDbConfig();
+    return new Database({
+        ...commonDbConfig,
+        db: doc_id,
+        table: sheet_name?.[0],
+    });
 }
 
-export async function DELETE() {
-    return new Response("Hello, world!");
+function handleError(error: unknown) {
+    if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response: { data: { error: unknown }; status: number } };
+        return new Response(
+            JSON.stringify(err.response.data.error),
+            { 
+                status: err.response.status,
+                headers: { 'Content-Type': 'application/json' }
+            }
+        );
+    }
+    return new Response(
+        JSON.stringify({ message: 'Internal Server Error' }),
+        { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        }
+    );
 }
 
-export async function PUT() {
-    return new Response("Hello, world!");
+export async function POST(
+    request: NextRequest,
+    { params }: { params: Promise<Params> }
+) {
+    const { doc_id, sheet_name } = await params;
+    const db = await createDatabase(doc_id, sheet_name);
+    
+    try {
+        const body = await request.json();
+        await db.load();
+        
+        const docs: Document[] = Array.isArray(body) ? body : [body];
+        const insertedDocs = await db.insert(docs);
+        
+        return new Response(JSON.stringify(insertedDocs), {
+            status: 201,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return handleError(error);
+    }
+}
+
+export async function DELETE(
+    request: NextRequest,
+    { params }: { params: Promise<Params> }
+) {
+    const { doc_id, sheet_name } = await params;
+    const searchParams = request.nextUrl.searchParams.toString();
+    const query = qs.parse(searchParams);
+    const db = await createDatabase(doc_id, sheet_name);
+    
+    try {
+        await db.load();
+        const removedDocs = await db.remove(query);
+        
+        return new Response(JSON.stringify(removedDocs), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return handleError(error);
+    }
+}
+
+export async function PUT(
+    request: NextRequest,
+    { params }: { params: Promise<Params> }
+) {
+    const { doc_id, sheet_name } = await params;
+    const searchParams = request.nextUrl.searchParams.toString();
+    const query = qs.parse(searchParams);
+    const db = await createDatabase(doc_id, sheet_name);
+    
+    try {
+        const body = await request.json();
+        await db.load();
+        const updatedDocs = await db.update(query, body);
+        
+        return new Response(JSON.stringify(updatedDocs), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return handleError(error);
+    }
+}
+
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: Promise<Params> }
+) {
+    const { doc_id, sheet_name } = await params;
+    const searchParams = request.nextUrl.searchParams.toString();
+    const query = qs.parse(searchParams);
+    const db = await createDatabase(doc_id, sheet_name);
+    
+    try {
+        const body = await request.json();
+        await db.load();
+        const updatedDoc = await db.updateOne(query, body);
+        
+        if (!updatedDoc) {
+            return new Response(JSON.stringify({ message: 'Document not found' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        return new Response(JSON.stringify(updatedDoc), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return handleError(error);
+    }
 }
 
 export async function GET(
@@ -55,21 +174,15 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
     const { doc_id, sheet_name } = await params;
-    const commonDbConfig = await getCommonDbConfig();
-    const db = new Database({
-        ...commonDbConfig,
-        db: doc_id,
-        table: sheet_name?.[0],
-    });
+    const db = await createDatabase(doc_id, sheet_name);
+    
     try {
-        await db.load()
+        await db.load();
         const docs = await db.find(query);
-        return new Response(JSON.stringify(docs));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        return new Response(
-            JSON.stringify(error.response.data.error),
-            { status: error.response.status }
-        );
+        return new Response(JSON.stringify(docs), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return handleError(error);
     }
 }
