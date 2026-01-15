@@ -1,0 +1,37 @@
+
+> gsheet_crud@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.1 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 1374ms
+ ○ Compiling /api/[doc_id]/[[...sheet_name]] ...
+ ✓ Compiled /api/[doc_id]/[[...sheet_name]] in 5.8s
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at GET (src/app/api/[doc_id]/[[...sheet_name]]/route.ts:71:42)
+  69 |     } catch (error: any) {
+  70 |         return new Response(
+> 71 |             JSON.stringify(error.response.data.error),
+     |                                          ^
+  72 |             { status: error.response.status }
+  73 |         );
+  74 |     }
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at GET (src/app/api/[doc_id]/[[...sheet_name]]/route.ts:71:42)
+  69 |     } catch (error: any) {
+  70 |         return new Response(
+> 71 |             JSON.stringify(error.response.data.error),
+     |                                          ^
+  72 |             { status: error.response.status }
+  73 |         );
+  74 |     }
+ GET /api/test-doc/test-sheet 500 in 9598ms
+ GET /api/test-doc/test-sheet 500 in 527ms

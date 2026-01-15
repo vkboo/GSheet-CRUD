@@ -67,9 +67,15 @@ export async function GET(
         return new Response(JSON.stringify(docs));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+        if (error.response?.data?.error) {
+            return new Response(
+                JSON.stringify(error.response.data.error),
+                { status: error.response.status }
+            );
+        }
         return new Response(
-            JSON.stringify(error.response.data.error),
-            { status: error.response.status }
+            JSON.stringify({ message: error.message || 'An unexpected error occurred' }),
+            { status: 500 }
         );
     }
 }
