@@ -80,6 +80,12 @@ function handleError(error: unknown) {
     return createResponse({ message: 'Internal Server Error' }, 500);
 }
 
+function isEmptyRow(obj: Document): boolean {
+    return Object.values(obj).every(
+        (v) => v === undefined || v === null || v === ''
+    );
+}
+
 export async function POST(
     request: NextRequest,
     { params }: { params: Promise<Params> }
@@ -150,7 +156,8 @@ export async function GET(
     try {
         await db.load();
         const docs = await db.find(query);
-        return createResponse(docs);
+        const filteredDocs = docs.filter((doc: Document) => !isEmptyRow(doc));
+        return createResponse(filteredDocs);
     } catch (error) {
         return handleError(error);
     }
