@@ -54,7 +54,7 @@ function handleError(error: unknown) {
         const err = error as { response: { data: { error: unknown }; status: number } };
         return new Response(
             JSON.stringify(err.response.data.error),
-            { 
+            {
                 status: err.response.status,
                 headers: { 'Content-Type': 'application/json' }
             }
@@ -62,7 +62,7 @@ function handleError(error: unknown) {
     }
     return new Response(
         JSON.stringify({ message: 'Internal Server Error' }),
-        { 
+        {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         }
@@ -75,14 +75,14 @@ export async function POST(
 ) {
     const { doc_id, sheet_name } = await params;
     const db = await createDatabase(doc_id, sheet_name);
-    
+
     try {
         const body = await request.json();
         await db.load();
-        
+
         const docs: Document[] = Array.isArray(body) ? body : [body];
         const insertedDocs = await db.insert(docs);
-        
+
         return new Response(JSON.stringify(insertedDocs), {
             status: 201,
             headers: { 'Content-Type': 'application/json' }
@@ -100,11 +100,11 @@ export async function DELETE(
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
     const db = await createDatabase(doc_id, sheet_name);
-    
+
     try {
         await db.load();
         const removedDocs = await db.remove(query);
-        
+
         return new Response(JSON.stringify(removedDocs), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
@@ -122,43 +122,13 @@ export async function PUT(
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
     const db = await createDatabase(doc_id, sheet_name);
-    
+
     try {
         const body = await request.json();
         await db.load();
         const updatedDocs = await db.update(query, body);
-        
-        return new Response(JSON.stringify(updatedDocs), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
-    } catch (error) {
-        return handleError(error);
-    }
-}
 
-export async function PATCH(
-    request: NextRequest,
-    { params }: { params: Promise<Params> }
-) {
-    const { doc_id, sheet_name } = await params;
-    const searchParams = request.nextUrl.searchParams.toString();
-    const query = qs.parse(searchParams);
-    const db = await createDatabase(doc_id, sheet_name);
-    
-    try {
-        const body = await request.json();
-        await db.load();
-        const updatedDoc = await db.updateOne(query, body);
-        
-        if (!updatedDoc) {
-            return new Response(JSON.stringify({ message: 'Document not found' }), {
-                status: 404,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-        
-        return new Response(JSON.stringify(updatedDoc), {
+        return new Response(JSON.stringify(updatedDocs), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -175,7 +145,7 @@ export async function GET(
     const query = qs.parse(searchParams);
     const { doc_id, sheet_name } = await params;
     const db = await createDatabase(doc_id, sheet_name);
-    
+
     try {
         await db.load();
         const docs = await db.find(query);
