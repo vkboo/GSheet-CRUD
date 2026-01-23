@@ -13,6 +13,29 @@ interface Document {
     [key: string]: unknown;
 }
 
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+};
+
+function createResponse(data: unknown, status: number = 200) {
+    return new Response(JSON.stringify(data), {
+        status,
+        headers: {
+            'Content-Type': 'application/json',
+            ...corsHeaders,
+        },
+    });
+}
+
+export async function OPTIONS() {
+    return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
+
 async function getServiceAccountPath() {
     if (process.env.NODE_ENV === 'development') {
         return path.join(process.cwd(), 'google-serviceaccount.json');
@@ -52,21 +75,9 @@ async function createDatabase(doc_id: string, sheet_name?: string[]) {
 function handleError(error: unknown) {
     if (error && typeof error === 'object' && 'response' in error) {
         const err = error as { response: { data: { error: unknown }; status: number } };
-        return new Response(
-            JSON.stringify(err.response.data.error),
-            {
-                status: err.response.status,
-                headers: { 'Content-Type': 'application/json' }
-            }
-        );
+        return createResponse(err.response.data.error, err.response.status);
     }
-    return new Response(
-        JSON.stringify({ message: 'Internal Server Error' }),
-        {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-        }
-    );
+    return createResponse({ message: 'Internal Server Error' }, 500);
 }
 
 export async function POST(
@@ -83,10 +94,7 @@ export async function POST(
         const docs: Document[] = Array.isArray(body) ? body : [body];
         const insertedDocs = await db.insert(docs);
 
-        return new Response(JSON.stringify(insertedDocs), {
-            status: 201,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return createResponse(insertedDocs, 201);
     } catch (error) {
         return handleError(error);
     }
@@ -105,10 +113,7 @@ export async function DELETE(
         await db.load();
         const removedDocs = await db.remove(query);
 
-        return new Response(JSON.stringify(removedDocs), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return createResponse(removedDocs);
     } catch (error) {
         return handleError(error);
     }
@@ -127,10 +132,7 @@ export async function PUT(
         await db.load();
         const updatedDocs = await db.update(query, body);
 
-        return new Response(JSON.stringify(updatedDocs), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return createResponse(updatedDocs);
     } catch (error) {
         return handleError(error);
     }
@@ -148,9 +150,7 @@ export async function GET(
     try {
         await db.load();
         const docs = await db.find(query);
-        return new Response(JSON.stringify(docs), {
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return createResponse(docs);
     } catch (error) {
         return handleError(error);
     }
