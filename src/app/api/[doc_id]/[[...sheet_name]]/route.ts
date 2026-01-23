@@ -122,7 +122,6 @@ export async function PUT(
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
     const db = await createDatabase(doc_id, sheet_name);
-
     try {
         const body = await request.json();
         await db.load();
