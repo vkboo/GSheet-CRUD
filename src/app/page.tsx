@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, ArrowRight, Database, RefreshCw, Zap, Search } from "lucide-react";
+import { Copy, Check, ArrowRight, Database, RefreshCw, Zap, Search, Sparkles } from "lucide-react";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -214,6 +214,53 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
+          </div>
+        </section>
+
+        <section className="px-4 md:px-8 py-24 max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-purple/10 border border-accent-purple/30 rounded-full text-sm text-accent-purple mb-6">
+              <Sparkles className="w-4 h-4" />
+              AI-Powered
+            </div>
+            <h2 className="text-3xl font-bold mb-4">AI Agent Skills</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Install the GSheet-CRUD skill to empower your AI coding assistant with complete API documentation and usage examples.
+            </p>
+          </div>
+
+          <div className="p-8 bg-card-bg border border-border rounded-2xl">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="shrink-0 w-12 h-12 flex items-center justify-center bg-gradient-to-br from-accent-purple to-accent-blue rounded-xl">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Install with Skills CLI</h3>
+                <p className="text-sm text-muted-foreground">
+                  Add the GSheet-CRUD skill to your AI agent with a single command. Works with Cursor, Windsurf, and other AI-powered IDEs.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-4 p-4 bg-code-bg border border-border rounded-xl font-mono text-sm overflow-x-auto">
+              <code className="text-accent-green whitespace-nowrap">npx skills add https://github.com/vkboo/GSheet-CRUD/skills</code>
+              <CopyButton text="npx skills add https://github.com/vkboo/GSheet-CRUD/skills" />
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Check className="w-4 h-4 text-accent-green" />
+                <span>Full API documentation</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Check className="w-4 h-4 text-accent-green" />
+                <span>Code examples included</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Check className="w-4 h-4 text-accent-green" />
+                <span>JavaScript & Python</span>
+              </div>
+            </div>
           </div>
         </section>
       </main>
