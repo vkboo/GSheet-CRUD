@@ -243,8 +243,8 @@ export default function Home() {
             </div>
 
             <div className="flex items-center justify-between gap-4 p-4 bg-code-bg border border-border rounded-xl font-mono text-sm overflow-x-auto">
-              <code className="text-accent-green whitespace-nowrap">npx skills add https://github.com/vkboo/GSheet-CRUD/skills</code>
-              <CopyButton text="npx skills add https://github.com/vkboo/GSheet-CRUD/skills" />
+              <code className="text-accent-green whitespace-nowrap">npx skills add vkboo/GSheet-CRUD/skills</code>
+              <CopyButton text="npx skills add vkboo/GSheet-CRUD/skills" />
             </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
