@@ -129,7 +129,7 @@ yarn install
 
 ### Configure Service Account
 
-Save the Google Cloud service account JSON key file as `google-serviceaccount.json` in the project root directory.
+Save the Google Cloud service account JSON key file as `secrets/gsheet-sql.json` in the project root directory.
 
 ### Start Development Server
 

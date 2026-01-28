@@ -36,7 +36,7 @@ export async function OPTIONS() {
 }
 
 function getServiceAccountPath() {
-    return path.join(process.cwd(), 'google-serviceaccount.json');
+    return path.join(process.cwd(), 'secrets/gsheet-sql.json');
 }
 
 const getCommonDbConfig = () => ({

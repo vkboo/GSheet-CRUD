@@ -359,7 +359,7 @@ export default function DocsPage() {
               <div className="flex gap-4 text-sm">
                 <span className="text-muted-foreground w-16">Value:</span>
                 <span className="text-foreground">
-                  Contents of your <code className="text-accent-green">google-serviceaccount.json</code> file
+                  Contents of your <code className="text-accent-green">secrets/gsheet-sql.json</code> file
                 </span>
               </div>
             </div>
@@ -383,7 +383,7 @@ npm run start`}
                 Set <code className="text-accent-green">GOOGLE_SERVICE_ACCOUNT_CREDENTIALS</code> environment variable (value is the JSON content)
               </li>
               <li>
-                Place <code className="text-accent-green">google-serviceaccount.json</code> file in the project root
+                Place <code className="text-accent-green">secrets/gsheet-sql.json</code> file in the project root
               </li>
             </ul>
           </section>
