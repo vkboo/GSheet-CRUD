@@ -44,4 +44,4 @@ next-env.d.ts
 .temp/
 
 # google service account
-/google-serviceaccount.json
+secrets/
