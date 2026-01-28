@@ -1,5 +1,6 @@
 import { Database } from 'sheetsql';
 import path from 'node:path';
+import fs from 'node:fs';
 import qs from 'qs';
 import { NextRequest } from 'next/server';
 
@@ -35,13 +36,20 @@ export async function OPTIONS() {
     });
 }
 
-function getServiceAccountPath() {
-    return path.join(process.cwd(), 'secrets/gsheet-sql.json');
+function getCommonDbConfig() {
+    const dockerPath = '/secrets/gsheet-sql.json';
+    const localPath = path.join(process.cwd(), 'secrets/gsheet-sql.json');
+    
+    if (fs.existsSync(dockerPath)) {
+        return {
+            keyFile: dockerPath,
+        };
+    }
+    
+    return {
+        keyFile: localPath,
+    };
 }
-
-const getCommonDbConfig = () => ({
-    keyFile: getServiceAccountPath(),
-});
 
 function createDatabase(doc_id: string, sheet_name?: string[]) {
     const commonDbConfig = getCommonDbConfig();
