@@ -97,7 +97,7 @@ export default function Home() {
               <div className="mb-3">
                 <span className="text-accent-green">$</span>
                 <span className="text-accent-blue ml-2">curl</span>
-                <span className="text-muted-foreground"> https://gsheet.codingfor.fun/api/YOUR_DOC_ID</span>
+                <span className="text-muted-foreground"> https://gsheet_sql.dev.iglooinsure.com/api/YOUR_DOC_ID</span>
               </div>
               <div className="text-foreground">
                 <span className="text-muted-foreground">{"{"}</span>
@@ -155,8 +155,8 @@ export default function Home() {
                 desc: "Add this service account as Editor to your Google Sheets:",
                 content: (
                   <div className="flex items-center justify-between gap-4 p-3 bg-code-bg border border-border rounded-lg font-mono text-sm overflow-x-auto">
-                    <code className="text-accent-green break-all">gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com</code>
-                    <CopyButton text="gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com" />
+                    <code className="text-accent-green break-all">google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com</code>
+                    <CopyButton text="google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com" />
                   </div>
                 ),
               },
@@ -243,8 +243,8 @@ export default function Home() {
             </div>
 
             <div className="flex items-center justify-between gap-4 p-4 bg-code-bg border border-border rounded-xl font-mono text-sm overflow-x-auto">
-              <code className="text-accent-green whitespace-nowrap">npx skills add vkboo/GSheet-CRUD/skills</code>
-              <CopyButton text="npx skills add vkboo/GSheet-CRUD/skills" />
+              <code className="text-accent-green whitespace-nowrap">npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git</code>
+              <CopyButton text="npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git" />
             </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">

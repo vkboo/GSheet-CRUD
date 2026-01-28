@@ -16,7 +16,7 @@ A Google Sheets RESTful API service based on [sheetsql](https://github.com/joway
 **Important**: You must add the following service account email as an **Editor** to your Google Sheets, otherwise reading and writing data will not work:
 
 ```
-gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com
+google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 ```
 
 Steps:

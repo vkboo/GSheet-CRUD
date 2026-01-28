@@ -16,7 +16,7 @@
 **重要**：你必须将以下服务账号邮箱添加为你的 Google 表格的**编辑者**，否则无法正常读写数据：
 
 ```
-gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com
+google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 ```
 
 操作步骤：

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
 
-const BASE_URL = "https://gsheet.codingfor.fun/api";
+const BASE_URL = "https://gsheet_sql.dev.iglooinsure.com/api";
 const EXAMPLE_DOC_ID = "1fQqyNzfEC33vwGrfNLd_WTQjA39B1J_9kmEPFLfCUNc";
 
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
@@ -175,7 +175,7 @@ export default function DocsPage() {
                 Add the following service account email as an <strong className="text-foreground">Editor</strong> to your Google Sheets.
                 Without this permission, the API cannot read or write data.
               </p>
-              <CodeBlock code="gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com" language="email" />
+              <CodeBlock code="google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com" language="email" />
               <div className="flex flex-col gap-2 mt-4">
                 {[
                   "Open your Google Sheets document",
