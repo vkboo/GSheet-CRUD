@@ -12,7 +12,7 @@ description: GSheet-CRUD API 使用指南。将 Google Sheets 作为 RESTful API
 将以下服务账户邮箱添加为 Google Sheets 的**编辑者**：
 
 ```
-gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com
+google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 ```
 
 ### 2. 数据格式要求
@@ -28,7 +28,7 @@ gsheett-younami@woven-fountain-458301-p7.iam.gserviceaccount.com
 ## API 端点
 
 ```
-https://gsheet.codingfor.fun/api/{doc_id}/{sheet_name}
+https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}/{sheet_name}
 ```
 
 - `doc_id`: 从 Google Sheets URL 获取 `https://docs.google.com/spreadsheets/d/{doc_id}/edit`
@@ -39,13 +39,13 @@ https://gsheet.codingfor.fun/api/{doc_id}/{sheet_name}
 获取所有数据：
 
 ```bash
-curl 'https://gsheet.codingfor.fun/api/{doc_id}'
+curl 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}'
 ```
 
 条件查询：
 
 ```bash
-curl 'https://gsheet.codingfor.fun/api/{doc_id}?name=John&age=25'
+curl 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}?name=John&age=25'
 ```
 
 响应示例：
@@ -61,7 +61,7 @@ curl 'https://gsheet.codingfor.fun/api/{doc_id}?name=John&age=25'
 插入单条记录：
 
 ```bash
-curl -X POST 'https://gsheet.codingfor.fun/api/{doc_id}' \
+curl -X POST 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}' \
   -H 'Content-Type: application/json' \
   -d '{"name": "Mike", "age": 28, "email": "mike@example.com"}'
 ```
@@ -69,7 +69,7 @@ curl -X POST 'https://gsheet.codingfor.fun/api/{doc_id}' \
 批量插入：
 
 ```bash
-curl -X POST 'https://gsheet.codingfor.fun/api/{doc_id}' \
+curl -X POST 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}' \
   -H 'Content-Type: application/json' \
   -d '[
     {"name": "Mike", "age": 28, "email": "mike@example.com"},
@@ -82,7 +82,7 @@ curl -X POST 'https://gsheet.codingfor.fun/api/{doc_id}' \
 通过查询参数匹配要更新的记录：
 
 ```bash
-curl -X PUT 'https://gsheet.codingfor.fun/api/{doc_id}?name=John' \
+curl -X PUT 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}?name=John' \
   -H 'Content-Type: application/json' \
   -d '{"age": 26, "email": "new_email@example.com"}'
 ```
@@ -92,13 +92,13 @@ curl -X PUT 'https://gsheet.codingfor.fun/api/{doc_id}?name=John' \
 通过查询参数匹配要删除的记录：
 
 ```bash
-curl -X DELETE 'https://gsheet.codingfor.fun/api/{doc_id}?name=John'
+curl -X DELETE 'https://gsheet_sql.dev.iglooinsure.com/api/{doc_id}?name=John'
 ```
 
 ## JavaScript 调用示例
 
 ```javascript
-const API_BASE = 'https://gsheet.codingfor.fun/api';
+const API_BASE = 'https://gsheet_sql.dev.iglooinsure.com/api';
 const DOC_ID = 'your_doc_id';
 
 // 查询
@@ -127,7 +127,7 @@ await fetch(`${API_BASE}/${DOC_ID}?name=John`, { method: 'DELETE' });
 ```python
 import requests
 
-API_BASE = 'https://gsheet.codingfor.fun/api'
+API_BASE = 'https://gsheet_sql.dev.iglooinsure.com/api'
 DOC_ID = 'your_doc_id'
 
 # 查询

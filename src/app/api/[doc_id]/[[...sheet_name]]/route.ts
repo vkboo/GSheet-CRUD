@@ -2,7 +2,6 @@ import { Database } from 'sheetsql';
 import path from 'node:path';
 import qs from 'qs';
 import { NextRequest } from 'next/server';
-import fs from 'fs/promises';
 
 type Params = {
     doc_id: string;
@@ -36,35 +35,16 @@ export async function OPTIONS() {
     });
 }
 
-async function getServiceAccountPath() {
-    if (process.env.NODE_ENV === 'development') {
-        return path.join(process.cwd(), 'google-serviceaccount.json');
-    }
-
-    const tempDir = path.join('/tmp', '.temp');
-    const tempFilePath = path.join(tempDir, 'google-serviceaccount.json');
-
-    try {
-        await fs.mkdir(tempDir, { recursive: true });
-    } catch (error) {
-        console.error('Failed to create temp directory:', error);
-    }
-
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS) {
-        await fs.writeFile(tempFilePath, process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS);
-        return tempFilePath;
-    }
-
-    const localPath = path.join(process.cwd(), 'google-serviceaccount.json');
-    return localPath;
+function getServiceAccountPath() {
+    return path.join(process.cwd(), 'google-serviceaccount.json');
 }
 
-const getCommonDbConfig = async () => ({
-    keyFile: await getServiceAccountPath(),
+const getCommonDbConfig = () => ({
+    keyFile: getServiceAccountPath(),
 });
 
-async function createDatabase(doc_id: string, sheet_name?: string[]) {
-    const commonDbConfig = await getCommonDbConfig();
+function createDatabase(doc_id: string, sheet_name?: string[]) {
+    const commonDbConfig = getCommonDbConfig();
     return new Database({
         ...commonDbConfig,
         db: doc_id,
@@ -91,7 +71,7 @@ export async function POST(
     { params }: { params: Promise<Params> }
 ) {
     const { doc_id, sheet_name } = await params;
-    const db = await createDatabase(doc_id, sheet_name);
+    const db = createDatabase(doc_id, sheet_name);
 
     try {
         const body = await request.json();
@@ -113,7 +93,7 @@ export async function DELETE(
     const { doc_id, sheet_name } = await params;
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
-    const db = await createDatabase(doc_id, sheet_name);
+    const db = createDatabase(doc_id, sheet_name);
 
     try {
         await db.load();
@@ -132,7 +112,7 @@ export async function PUT(
     const { doc_id, sheet_name } = await params;
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
-    const db = await createDatabase(doc_id, sheet_name);
+    const db = createDatabase(doc_id, sheet_name);
     try {
         const body = await request.json();
         await db.load();
@@ -151,7 +131,7 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams.toString();
     const query = qs.parse(searchParams);
     const { doc_id, sheet_name } = await params;
-    const db = await createDatabase(doc_id, sheet_name);
+    const db = createDatabase(doc_id, sheet_name);
 
     try {
         await db.load();
