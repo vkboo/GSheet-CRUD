@@ -7,7 +7,6 @@ A Google Sheets RESTful API service based on [sheetsql](https://github.com/joway
 - Use Google Sheets as a lightweight database
 - Standard RESTful API (GET/POST/PUT/DELETE)
 - Support query parameters for data filtering
-- Built with Next.js, supports one-click deployment to Vercel
 
 ## Prerequisites
 
@@ -40,7 +39,19 @@ Example sheet structure:
 
 ## API Usage
 
-### URL Format
+### For AI Agents
+
+Install the GSheet-CRUD skill for AI agents (Claude, Cursor, etc.):
+
+```bash
+npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git
+```
+
+After installation, AI agents can automatically use the API to perform CRUD operations on Google Sheets.
+
+### Manual Usage
+
+#### URL Format
 
 ```
 /{doc_id}/{sheet_name}
@@ -49,7 +60,7 @@ Example sheet structure:
 - `doc_id`: Google Sheets document ID (can be found in the URL: `https://docs.google.com/spreadsheets/d/{doc_id}/edit`)
 - `sheet_name`: Sheet name (optional, defaults to `Sheet1`)
 
-### Query Data (GET)
+#### Query Data (GET)
 
 Get all data:
 ```bash
@@ -61,7 +72,7 @@ Query with conditions:
 GET /{doc_id}/{sheet_name}?name=John&age=25
 ```
 
-### Insert Data (POST)
+#### Insert Data (POST)
 
 Insert a single record:
 ```bash
@@ -86,7 +97,7 @@ Content-Type: application/json
 ]
 ```
 
-### Update Data (PUT)
+#### Update Data (PUT)
 
 Match data to update using query parameters:
 ```bash
@@ -99,7 +110,7 @@ Content-Type: application/json
 }
 ```
 
-### Delete Data (DELETE)
+#### Delete Data (DELETE)
 
 Match data to delete using query parameters:
 ```bash
@@ -132,16 +143,6 @@ The service will start at [http://localhost:3000](http://localhost:3000).
 
 ## Deployment
 
-### Deploy to Vercel (Recommended)
-
-1. Push the project to GitHub
-2. Import the project in [Vercel](https://vercel.com)
-3. Add environment variable in project settings under "Environment Variables":
-   - Name: `GOOGLE_SERVICE_ACCOUNT_CREDENTIALS`
-   - Value: Paste the complete contents of `google-serviceaccount.json` file
-4. Click Deploy
-
-### Other Deployment Methods
 
 Build for production:
 ```bash
@@ -152,10 +153,6 @@ Start production server:
 ```bash
 npm run start
 ```
-
-**Note**: When deploying in non-Vercel environments, ensure you configure the service account credentials using one of these methods:
-- Set environment variable `GOOGLE_SERVICE_ACCOUNT_CREDENTIALS` (value is the JSON file content)
-- Or place the `google-serviceaccount.json` file in the project root directory
 
 ## Tech Stack
 

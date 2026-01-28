@@ -1,30 +1,29 @@
 # GSheet-CRUD
 
-基于 [sheetsql](https://github.com/joway/sheetsql) 的 Google Sheets RESTful API 服务，将 Google 表格作为数据库使用，提供完整的 CRUD 操作接口。
+基于 [sheetsql](https://github.com/joway/sheetsql) 的 Google Sheets RESTful API 服务，将 Google Sheets 作为数据库，支持完整的 CRUD 操作。
 
 ## 功能特性
 
-- 将 Google Sheets 作为轻量级数据库使用
-- 提供标准的 RESTful API（GET/POST/PUT/DELETE）
-- 支持查询参数过滤数据
-- 基于 Next.js 构建，支持 Vercel 一键部署
+- 使用 Google Sheets 作为轻量级数据库
+- 标准 RESTful API（GET/POST/PUT/DELETE）
+- 支持查询参数进行数据过滤
 
 ## 前置条件
 
-### 1. 共享 Google 表格权限
+### 1. 分享 Google Sheets 权限
 
-**重要**：你必须将以下服务账号邮箱添加为你的 Google 表格的**编辑者**，否则无法正常读写数据：
+**重要**：您必须将以下服务账户邮箱添加为 Google Sheets 的**编辑者**，否则将无法读写数据：
 
 ```
 google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 ```
 
 操作步骤：
-1. 打开你的 Google Sheets 文档
-2. 点击右上角的「共享」按钮
-3. 在「添加用户」输入框中粘贴上述邮箱地址
-4. 将权限设置为「编辑者」
-5. 点击「完成」
+1. 打开您的 Google Sheets 文档
+2. 点击右上角的"共享"按钮
+3. 在"添加用户"输入框中粘贴上述邮箱地址
+4. 将权限设置为"编辑者"
+5. 点击"完成"
 
 ### 2. 准备表格数据
 
@@ -35,21 +34,33 @@ google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 
 | name | age | email |
 |------|-----|-------|
-| 张三 | 25 | zhangsan@example.com |
-| 李四 | 30 | lisi@example.com |
+| John | 25 | john@example.com |
+| Jane | 30 | jane@example.com |
 
-## API 使用说明
+## API 使用
 
-### URL 格式
+### 给大模型使用
+
+为 AI 代理（Claude、Cursor 等）安装 GSheet-CRUD skill：
+
+```bash
+npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git
+```
+
+安装后，AI 代理可以自动使用 API 对 Google Sheets 进行 CRUD 操作。
+
+### 手动使用
+
+#### URL 格式
 
 ```
 /{doc_id}/{sheet_name}
 ```
 
-- `doc_id`：Google Sheets 文档 ID（可从 URL 中获取：`https://docs.google.com/spreadsheets/d/{doc_id}/edit`）
+- `doc_id`：Google Sheets 文档 ID（可在 URL 中找到：`https://docs.google.com/spreadsheets/d/{doc_id}/edit`）
 - `sheet_name`：工作表名称（可选，默认为 `Sheet1`）
 
-### 查询数据 (GET)
+#### 查询数据（GET）
 
 获取所有数据：
 ```bash
@@ -58,39 +69,39 @@ GET /{doc_id}/{sheet_name}
 
 条件查询：
 ```bash
-GET /{doc_id}/{sheet_name}?name=张三&age=25
+GET /{doc_id}/{sheet_name}?name=John&age=25
 ```
 
-### 新增数据 (POST)
+#### 插入数据（POST）
 
-新增单条数据：
+插入单条记录：
 ```bash
 POST /{doc_id}/{sheet_name}
 Content-Type: application/json
 
 {
-  "name": "王五",
+  "name": "Mike",
   "age": 28,
-  "email": "wangwu@example.com"
+  "email": "mike@example.com"
 }
 ```
 
-新增多条数据：
+批量插入：
 ```bash
 POST /{doc_id}/{sheet_name}
 Content-Type: application/json
 
 [
-  {"name": "王五", "age": 28, "email": "wangwu@example.com"},
-  {"name": "赵六", "age": 35, "email": "zhaoliu@example.com"}
+  {"name": "Mike", "age": 28, "email": "mike@example.com"},
+  {"name": "Sarah", "age": 35, "email": "sarah@example.com"}
 ]
 ```
 
-### 更新数据 (PUT)
+#### 更新数据（PUT）
 
 通过查询参数匹配要更新的数据：
 ```bash
-PUT /{doc_id}/{sheet_name}?name=张三
+PUT /{doc_id}/{sheet_name}?name=John
 Content-Type: application/json
 
 {
@@ -99,11 +110,11 @@ Content-Type: application/json
 }
 ```
 
-### 删除数据 (DELETE)
+#### 删除数据（DELETE）
 
 通过查询参数匹配要删除的数据：
 ```bash
-DELETE /{doc_id}/{sheet_name}?name=张三
+DELETE /{doc_id}/{sheet_name}?name=John
 ```
 
 ## 本地开发
@@ -112,36 +123,25 @@ DELETE /{doc_id}/{sheet_name}?name=张三
 
 ```bash
 npm install
-# 或
+# or
 yarn install
 ```
 
-### 配置服务账号
+### 配置服务账户
 
-将 Google Cloud 服务账号的 JSON 密钥文件保存为项目根目录下的 `google-serviceaccount.json`。
+将 Google Cloud 服务账户 JSON 密钥文件保存为项目根目录下的 `google-serviceaccount.json`。
 
 ### 启动开发服务器
 
 ```bash
 npm run dev
-# 或
+# or
 yarn dev
 ```
 
 服务将在 [http://localhost:3000](http://localhost:3000) 启动。
 
 ## 部署
-
-### 部署到 Vercel（推荐）
-
-1. 将项目推送到 GitHub
-2. 在 [Vercel](https://vercel.com) 中导入项目
-3. 在项目设置的「Environment Variables」中添加环境变量：
-   - 变量名：`GOOGLE_SERVICE_ACCOUNT_CREDENTIALS`
-   - 变量值：将 `google-serviceaccount.json` 文件的完整内容粘贴进去
-4. 点击部署
-
-### 其他部署方式
 
 构建生产版本：
 ```bash
@@ -153,21 +153,17 @@ npm run build
 npm run start
 ```
 
-**注意**：在非 Vercel 环境部署时，确保以下任一方式配置服务账号凭据：
-- 设置环境变量 `GOOGLE_SERVICE_ACCOUNT_CREDENTIALS`（值为 JSON 文件内容）
-- 或将 `google-serviceaccount.json` 文件放置在项目根目录
-
 ## 技术栈
 
 - [Next.js](https://nextjs.org/) - React 全栈框架
 - [sheetsql](https://github.com/joway/sheetsql) - Google Sheets 数据库操作库
-- [qs](https://www.npmjs.com/package/qs) - URL 查询参数解析
+- [qs](https://www.npmjs.com/package/qs) - URL 查询字符串解析
 
 ## 相关链接
 
 - [sheetsql GitHub](https://github.com/joway/sheetsql)
 - [sheetsql NPM](https://www.npmjs.com/package/sheetsql)
-- [Google Cloud 服务账号文档](https://cloud.google.com/docs/authentication/production)
+- [Google Cloud 服务账户文档](https://cloud.google.com/docs/authentication/production)
 
 ## 许可证
 
