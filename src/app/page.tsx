@@ -97,7 +97,7 @@ export default function Home() {
               <div className="mb-3">
                 <span className="text-accent-green">$</span>
                 <span className="text-accent-blue ml-2">curl</span>
-                <span className="text-muted-foreground"> https://gsheet_sql.dev.iglooinsure.com/api/YOUR_DOC_ID</span>
+                <span className="text-muted-foreground"> https://gsheet-sql.dev.iglooinsure.com/api/YOUR_DOC_ID</span>
               </div>
               <div className="text-foreground">
                 <span className="text-muted-foreground">{"{"}</span>
