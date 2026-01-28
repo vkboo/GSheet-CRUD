@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
 
-const BASE_URL = "https://gsheet_sql.dev.iglooinsure.com/api";
+const BASE_URL = "https://gsheet-sql.dev.iglooinsure.com/api";
 const EXAMPLE_DOC_ID = "1fQqyNzfEC33vwGrfNLd_WTQjA39B1J_9kmEPFLfCUNc";
 
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
