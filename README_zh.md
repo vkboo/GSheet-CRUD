@@ -129,7 +129,7 @@ yarn install
 
 ### 配置服务账户
 
-将 Google Cloud 服务账户 JSON 密钥文件保存为项目根目录下的 `google-serviceaccount.json`。
+将 Google Cloud 服务账户 JSON 密钥文件保存为项目根目录下的 `secrets/gsheet-sql.json`。
 
 ### 启动开发服务器
 

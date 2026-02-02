@@ -11,5 +11,5 @@ Dockerfile
 *.tsbuildinfo
 next-env.d.ts
 coverage
-google-serviceaccount.json
 .env*
+secrets
