@@ -44,4 +44,10 @@ next-env.d.ts
 .temp/
 
 # google service account
+/google-serviceaccount.json
 secrets/
+
+# AI agents
+/.agents/
+/.curosr/
+/.codex/
