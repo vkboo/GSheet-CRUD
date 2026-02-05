@@ -36,6 +36,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
+  const codeColor = language === "bash" ? "text-[#0f766e]" : "text-[#1a1a1a]";
   return (
     <div className="rounded-lg border border-[#e5e5e5] overflow-hidden my-4 bg-[#f9f9f9]">
       <div className="flex items-center justify-between px-4 py-2 bg-[#f5f5f5] border-b border-[#e5e5e5]">
@@ -43,7 +44,7 @@ function CodeBlock({ code, language = "bash" }: { code: string; language?: strin
         <CopyButton text={code} />
       </div>
       <pre className="p-4 overflow-x-auto">
-        <code className="text-sm font-mono text-[#1a1a1a] whitespace-pre">{code}</code>
+        <code className={`text-sm font-mono whitespace-pre ${codeColor}`}>{code}</code>
       </pre>
     </div>
   );
@@ -58,25 +59,33 @@ function SectionHeading({ children, id }: { children: React.ReactNode; id: strin
   );
 }
 
-const sections = [
+const navItems = [
   { id: "overview", label: "Overview" },
   { id: "quick-start", label: "Quick start" },
-  { id: "ai-skills", label: "AI Skills", icon: true },
-  { id: "url-format", label: "URL Format" },
-  { id: "get", label: "GET" },
-  { id: "post", label: "POST" },
-  { id: "put", label: "PUT" },
-  { id: "delete", label: "DELETE" },
+  {
+    label: "API",
+    children: [
+      { id: "url-format", label: "URL Format" },
+      { id: "get", label: "GET" },
+      { id: "post", label: "POST" },
+      { id: "put", label: "PUT" },
+      { id: "delete", label: "DELETE" },
+    ],
+  },
 ];
+
+const sectionIds = navItems.flatMap((item) =>
+  item.children ? item.children.map((child) => child.id) : item.id ? [item.id] : []
+);
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string>("overview");
 
   useEffect(() => {
     const handleScroll = () => {
-      const sectionElements = sections.map((s) => ({
-        id: s.id,
-        element: document.getElementById(s.id),
+      const sectionElements = sectionIds.map((id) => ({
+        id,
+        element: document.getElementById(id),
       }));
 
       const scrollPosition = window.scrollY + 100;
@@ -118,23 +127,58 @@ export default function Home() {
               </div>
 
               <nav className="flex flex-col gap-0.5">
-              {sections.map((s) => (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  onClick={(e) => handleNavClick(e, s.id)}
-                  className={`text-[15px] py-1 transition-colors flex items-center gap-2 ${
-                    activeSection === s.id
-                      ? "text-[#1a1a1a] font-medium"
-                      : "text-[#737373] hover:text-[#1a1a1a]"
-                  }`}
-                >
-                  {s.label}
-                  {s.icon && (
-                    <Sparkles className="w-3.5 h-3.5 text-[#4E4EEB]" />
-                  )}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const hasChildren = !!item.children?.length;
+                const isActive = item.id ? activeSection === item.id : false;
+                const isParentActive = hasChildren ? item.children?.some((child) => child.id === activeSection) : false;
+
+                return (
+                  <div key={item.label} className="mb-2">
+                    {item.id ? (
+                      <a
+                        href={`#${item.id}`}
+                        onClick={(e) => handleNavClick(e, item.id)}
+                        className={`text-[15px] py-1 transition-colors flex items-center gap-2 ${
+                          isActive
+                            ? "text-[#1a1a1a] font-medium"
+                            : "text-[#737373] hover:text-[#1a1a1a]"
+                        }`}
+                      >
+                        {item.label}
+                        {item.icon && (
+                          <Sparkles className="w-3.5 h-3.5 text-[#4E4EEB]" />
+                        )}
+                      </a>
+                    ) : (
+                      <div
+                        className={`text-xs uppercase tracking-wider font-semibold py-1 ${
+                          isParentActive ? "text-[#1a1a1a]" : "text-[#737373]"
+                        }`}
+                      >
+                        {item.label}
+                      </div>
+                    )}
+                    {hasChildren ? (
+                      <div className="ml-3 border-l border-[#e5e5e5] pl-3 flex flex-col gap-0.5">
+                        {item.children?.map((child) => (
+                          <a
+                            key={child.id}
+                            href={`#${child.id}`}
+                            onClick={(e) => handleNavClick(e, child.id)}
+                            className={`text-[14px] py-1 transition-colors ${
+                              activeSection === child.id
+                                ? "text-[#1a1a1a] font-medium"
+                                : "text-[#737373] hover:text-[#1a1a1a]"
+                            }`}
+                          >
+                            {child.label}
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
               </nav>
             </div>
           </aside>
@@ -142,74 +186,75 @@ export default function Home() {
           <main className="flex-1 min-w-0 py-12 max-w-[680px]">
             <section id="overview" className="mb-12">
               <h1 className="text-[28px] font-bold text-[#1a1a1a] mb-2">Overview</h1>
-              <p className="text-lg text-[#737373] mb-10">Turn Google Sheets into a REST API</p>
+              <p className="text-lg text-[#737373] mb-10">Vibe Coding guide for non-technical users</p>
 
               <p className="text-[#404040] leading-[1.7] mb-5">
-                <strong className="text-[#1a1a1a] font-semibold">GSheet-CRUD</strong> (gsheet + crud) is a lightweight service that transforms your Google Sheets into a full-featured REST API. Create, read, update, and delete data using standard HTTP methods.
+                This guide is written for non-technical roles. You do not need to build a backend or understand databases. If you can use
+                Google Sheets, you can use it as your database and ship a working system fast.
               </p>
 
               <p className="text-[#404040] leading-[1.7] mb-5">
-                Built on{" "}
-                <a href="https://github.com/joway/sheetsql" target="_blank" rel="noopener noreferrer" className="text-[#2563eb] hover:underline">
-                  sheetsql
-                </a>
-                , it provides a simple way to use Google Sheets as a database for prototypes, internal tools, or small applications. No backend required.
+                <strong className="text-[#1a1a1a] font-semibold">GSheet-CRUD</strong> turns Google Sheets into a full REST API. You only need
+                to describe your business needs and the AI can assemble the UI and features.
               </p>
 
-              <p className="text-[#404040] leading-[1.7]">
-                The key insight: Google Sheets is already a database that everyone knows how to use. GSheet-CRUD just adds an API layer on top.
-              </p>
             </section>
 
             <SectionHeading id="quick-start">Quick start</SectionHeading>
 
-            <ol className="list-decimal list-inside space-y-2 text-[#404040] mb-6 marker:text-[#737373]">
-              <li><strong className="text-[#1a1a1a] font-semibold">Share</strong> your Google Sheet with the service account as Editor</li>
-              <li><strong className="text-[#1a1a1a] font-semibold">Format</strong> your data — first row = column names, data starts from row 2</li>
-              <li><strong className="text-[#1a1a1a] font-semibold">Call</strong> the API using your document ID from the sheet URL</li>
-            </ol>
+            <div className="space-y-6">
+              <div className="p-4 bg-white border border-[#e5e5e5] rounded-lg">
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mb-2">1. Create a new Sheet and grant access</p>
+                <p className="text-[#404040] mb-3">
+                  Create a Google Sheet and add the email below as an <strong className="text-[#1a1a1a] font-semibold">Editor</strong>.
+                  This is a fixed company DevOps account and should not be replaced.
+                  <strong className="text-[#1a1a1a] font-semibold">Sharing with this email does not pose a data leakage risk.</strong>
+                </p>
+                <CodeBlock code="google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com" language="email" />
+                <p className="text-sm text-[#737373] mt-3">
+                  If you only need a <strong className="text-[#1a1a1a] font-semibold">temporary</strong> sheet, you can use:
+                  <a
+                    href="https://docs.google.com/spreadsheets/d/1mFZCZ7UUoaOKYpCwhMCgzkkUuz83VyvsgqW3kbJ2xMI/edit?gid=0#gid=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#2563eb] hover:underline ml-2"
+                  >
+                    Sample Sheet
+                  </a>
+                </p>
+              </div>
 
-            <p className="text-sm text-[#737373] mb-2">Service account email:</p>
-            <CodeBlock code="google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com" language="email" />
+              <div className="p-4 bg-white border border-[#e5e5e5] rounded-lg">
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mb-2">2. Create a new project on your computer</p>
+                <p className="text-[#404040] mb-3">
+                  Example project name:{" "}
+                  <code className="bg-[#f0f0f0] px-1.5 py-0.5 rounded text-[#1a1a1a] font-mono text-[13px]">manage_demo</code>
+                </p>
+                <CodeBlock
+                  code={`mkdir manage_demo
+cd manage_demo`}
+                />
+              </div>
 
-            <div className="my-6 p-4 bg-white border border-[#e5e5e5] rounded-lg">
-              <p className="text-sm text-[#737373] mb-3">Your sheet should be structured like this:</p>
-              <div className="border border-[#e5e5e5] rounded overflow-hidden text-sm">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-[#f5f5f5]">
-                      <th className="px-4 py-2.5 text-left font-semibold text-[#1a1a1a] border-r border-[#e5e5e5]">name</th>
-                      <th className="px-4 py-2.5 text-left font-semibold text-[#1a1a1a] border-r border-[#e5e5e5]">age</th>
-                      <th className="px-4 py-2.5 text-left font-semibold text-[#1a1a1a]">email</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-t border-[#e5e5e5]">
-                      <td className="px-4 py-2.5 border-r border-[#e5e5e5] text-[#404040]">John</td>
-                      <td className="px-4 py-2.5 border-r border-[#e5e5e5] text-[#404040]">25</td>
-                      <td className="px-4 py-2.5 text-[#404040]">john@example.com</td>
-                    </tr>
-                    <tr className="border-t border-[#e5e5e5]">
-                      <td className="px-4 py-2.5 border-r border-[#e5e5e5] text-[#404040]">Jane</td>
-                      <td className="px-4 py-2.5 border-r border-[#e5e5e5] text-[#404040]">30</td>
-                      <td className="px-4 py-2.5 text-[#404040]">jane@example.com</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="p-4 bg-white border border-[#e5e5e5] rounded-lg">
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mb-2">3. Install the GSheet-CRUD Skill</p>
+                <p className="text-[#404040] mb-3">Copy and run:</p>
+                <CodeBlock code="npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git" />
+              </div>
+
+              <div className="p-4 bg-white border border-[#e5e5e5] rounded-lg">
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mb-2">4. Use this prompt to generate the app</p>
+                <CodeBlock
+                  code={`According to the requirements in SKILL.md, use\nhttps://docs.google.com/spreadsheets/d/1mFZCZ7UUoaOKYpCwhMCgzkkUuz83VyvsgqW3kbJ2xMI/edit?gid=0#gid=0\nas the database to build a simple student management system.\n\nUse Vite + React + Tailwind CSS + shadcn.`}
+                  language="text"
+                />
+              </div>
+
+              <div className="p-4 bg-white border border-[#e5e5e5] rounded-lg">
+                <p className="text-[15px] font-semibold text-[#1a1a1a] mb-2">5. Wait for the page to generate</p>
+                <p className="text-[#404040]">When generation completes, preview the page directly.</p>
               </div>
             </div>
-
-            <SectionHeading id="ai-skills">AI Skills</SectionHeading>
-
-            <p className="text-[#404040] mb-4">
-              Install the GSheet-CRUD skill to your AI coding assistant for complete API documentation and examples.
-            </p>
-
-            <CodeBlock code="npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git" />
-
-            <p className="text-sm text-[#737373]">
-              Works with Cursor, Claude Code, Windsurf, and other AI-powered IDEs.
-            </p>
 
             <SectionHeading id="url-format">URL Format</SectionHeading>
 
