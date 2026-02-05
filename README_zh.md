@@ -12,7 +12,7 @@
 
 ### 1. 分享 Google Sheets 权限
 
-**重要**：您必须将以下服务账户邮箱添加为 Google Sheets 的**编辑者**，否则将无法读写数据：
+**重要**：您必须将以下服务账户邮箱添加为 Google Sheets 的**编辑者**，否则将无法读写数据。该邮箱为公司 DevOps 固定账号，不可替换，分享给该邮箱不存在数据泄漏问题：
 
 ```
 google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
@@ -39,6 +39,12 @@ google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
 
 ## API 使用
 
+### Base URL
+
+```
+https://gsheet-sql.dev.iglooinsure.com/api
+```
+
 ### 给大模型使用
 
 为 AI 代理（Claude、Cursor 等）安装 GSheet-CRUD skill：
@@ -54,7 +60,7 @@ npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git
 #### URL 格式
 
 ```
-/{doc_id}/{sheet_name}
+{base_url}/{doc_id}/{sheet_name}
 ```
 
 - `doc_id`：Google Sheets 文档 ID（可在 URL 中找到：`https://docs.google.com/spreadsheets/d/{doc_id}/edit`）
@@ -64,19 +70,19 @@ npx skills add git@gitlab.iglooinsure.com:axinan/fe/platform/gsheet-crud.git
 
 获取所有数据：
 ```bash
-GET /{doc_id}/{sheet_name}
+GET {base_url}/{doc_id}/{sheet_name}
 ```
 
 条件查询：
 ```bash
-GET /{doc_id}/{sheet_name}?name=John&age=25
+GET {base_url}/{doc_id}/{sheet_name}?name=John&age=25
 ```
 
 #### 插入数据（POST）
 
 插入单条记录：
 ```bash
-POST /{doc_id}/{sheet_name}
+POST {base_url}/{doc_id}/{sheet_name}
 Content-Type: application/json
 
 {
@@ -88,7 +94,7 @@ Content-Type: application/json
 
 批量插入：
 ```bash
-POST /{doc_id}/{sheet_name}
+POST {base_url}/{doc_id}/{sheet_name}
 Content-Type: application/json
 
 [
@@ -101,7 +107,7 @@ Content-Type: application/json
 
 通过查询参数匹配要更新的数据：
 ```bash
-PUT /{doc_id}/{sheet_name}?name=John
+PUT {base_url}/{doc_id}/{sheet_name}?name=John
 Content-Type: application/json
 
 {
@@ -114,7 +120,7 @@ Content-Type: application/json
 
 通过查询参数匹配要删除的数据：
 ```bash
-DELETE /{doc_id}/{sheet_name}?name=John
+DELETE {base_url}/{doc_id}/{sheet_name}?name=John
 ```
 
 ## 本地开发

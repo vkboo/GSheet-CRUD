@@ -12,7 +12,7 @@ A Google Sheets RESTful API service based on [sheetsql](https://github.com/joway
 
 ### 1. Share Google Sheets Permission
 
-**Important**: You must add the following service account email as an **Editor** to your Google Sheets, otherwise reading and writing data will not work:
+**Important**: You must add the following service account email as an **Editor** to your Google Sheets, otherwise reading and writing data will not work. This email is a fixed company DevOps account and cannot be replaced. Sharing with this email does not pose any data leakage risk:
 
 ```
 google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
@@ -39,6 +39,12 @@ Example sheet structure:
 
 ## API Usage
 
+### Base URL
+
+```
+https://gsheet-sql.dev.iglooinsure.com/api
+```
+
 ### For AI Agents
 
 Install the GSheet-CRUD skill for AI agents (Claude, Cursor, etc.):
@@ -54,7 +60,7 @@ After installation, AI agents can automatically use the API to perform CRUD oper
 #### URL Format
 
 ```
-/{doc_id}/{sheet_name}
+{base_url}/{doc_id}/{sheet_name}
 ```
 
 - `doc_id`: Google Sheets document ID (can be found in the URL: `https://docs.google.com/spreadsheets/d/{doc_id}/edit`)
@@ -64,12 +70,12 @@ After installation, AI agents can automatically use the API to perform CRUD oper
 
 Get all data:
 ```bash
-GET /{doc_id}/{sheet_name}
+GET {base_url}/{doc_id}/{sheet_name}
 ```
 
 Query with conditions:
 ```bash
-GET /{doc_id}/{sheet_name}?name=John&age=25
+GET {base_url}/{doc_id}/{sheet_name}?name=John&age=25
 ```
 
 #### Insert Data (POST)
