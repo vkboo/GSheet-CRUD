@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, Sparkles } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 const BASE_URL = "https://gsheet-sql.dev.iglooinsure.com/api";
 const EXAMPLE_DOC_ID = "1fQqyNzfEC33vwGrfNLd_WTQjA39B1J_9kmEPFLfCUNc";
@@ -145,9 +145,6 @@ export default function Home() {
                         }`}
                       >
                         {item.label}
-                        {item.icon && (
-                          <Sparkles className="w-3.5 h-3.5 text-[#4E4EEB]" />
-                        )}
                       </a>
                     ) : (
                       <div
