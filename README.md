@@ -82,7 +82,7 @@ GET {base_url}/{doc_id}/{sheet_name}?name=John&age=25
 
 Insert a single record:
 ```bash
-POST /{doc_id}/{sheet_name}
+POST {base_url}/{doc_id}/{sheet_name}
 Content-Type: application/json
 
 {
@@ -94,7 +94,7 @@ Content-Type: application/json
 
 Insert multiple records:
 ```bash
-POST /{doc_id}/{sheet_name}
+POST {base_url}/{doc_id}/{sheet_name}
 Content-Type: application/json
 
 [
@@ -107,7 +107,7 @@ Content-Type: application/json
 
 Match data to update using query parameters:
 ```bash
-PUT /{doc_id}/{sheet_name}?name=John
+PUT {base_url}/{doc_id}/{sheet_name}?name=John
 Content-Type: application/json
 
 {
@@ -120,7 +120,7 @@ Content-Type: application/json
 
 Match data to delete using query parameters:
 ```bash
-DELETE /{doc_id}/{sheet_name}?name=John
+DELETE {base_url}/{doc_id}/{sheet_name}?name=John
 ```
 
 ## Local Development
@@ -148,7 +148,6 @@ yarn dev
 The service will start at [http://localhost:3000](http://localhost:3000).
 
 ## Deployment
-
 
 Build for production:
 ```bash
