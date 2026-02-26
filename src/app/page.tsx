@@ -59,7 +59,20 @@ function SectionHeading({ children, id }: { children: React.ReactNode; id: strin
   );
 }
 
-const navItems = [
+type NavLeaf = {
+  id: string;
+  label: string;
+  icon?: boolean;
+  children?: never;
+};
+
+type NavGroup = {
+  label: string;
+  children: NavLeaf[];
+  id?: never;
+};
+
+const navItems: Array<NavLeaf | NavGroup> = [
   { id: "overview", label: "Overview" },
   { id: "quick-start", label: "Quick start" },
   {
