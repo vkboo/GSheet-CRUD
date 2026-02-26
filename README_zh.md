@@ -15,7 +15,7 @@
 **重要**：您必须将以下服务账户邮箱添加为 Google Sheets 的**编辑者**，否则将无法读写数据。该邮箱为公司 DevOps 固定账号，不可替换，分享给该邮箱不存在数据泄漏问题：
 
 ```
-google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
+gsheet-sql@axinan-dev.iam.gserviceaccount.com
 ```
 
 操作步骤：

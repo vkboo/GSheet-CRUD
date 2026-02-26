@@ -12,7 +12,7 @@ description: GSheet-CRUD API 使用指南。将 Google Sheets 作为 RESTful API
 将以下服务账户邮箱添加为 Google Sheets 的**编辑者**：
 
 ```
-google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com
+gsheet-sql@axinan-dev.iam.gserviceaccount.com
 ```
 
 ### 2. 数据格式要求

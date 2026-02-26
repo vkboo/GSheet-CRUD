@@ -210,7 +210,7 @@ export default function Home() {
                   This is a fixed company DevOps account and should not be replaced.
                   <strong className="text-[#1a1a1a] font-semibold">Sharing with this email does not pose a data leakage risk.</strong>
                 </p>
-                <CodeBlock code="google-sheet-db@mythic-groove-485702-k4.iam.gserviceaccount.com" language="email" />
+                <CodeBlock code="gsheet-sql@axinan-dev.iam.gserviceaccount.com" language="email" />
                 <p className="text-sm text-[#737373] mt-3">
                   If you only need a <strong className="text-[#1a1a1a] font-semibold">temporary</strong> sheet, you can use:
                   <a
