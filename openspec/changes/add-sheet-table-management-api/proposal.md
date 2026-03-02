@@ -4,16 +4,16 @@
 
 ## What Changes
 
-- 新增 Sheet 管理 API：支持查询文档中的所有工作表、创建新工作表、删除工作表
+- 新增 Sheet 管理 API：支持查询文档中的所有工作表、创建新工作表、重命名工作表、删除工作表
 - 新增 Table（表头）管理 API：支持查询指定 Sheet 的表头定义、创建/设置表头（写入第一行列名）
-- 直接使用 `googleapis`（项目已有依赖）的 Google Sheets API v4，绕过 `sheetsql` 的限制
+- 显式安装并使用 `googleapis` 的 Google Sheets API v4，补充 `sheetsql` 未覆盖的管理能力
 - 更新前端 API 文档页面，展示新增的管理接口
 
 ## Capabilities
 
 ### New Capabilities
 
-- `sheet-management`：工作表（Sheet）的列表查询、创建和删除功能
+- `sheet-management`：工作表（Sheet）的列表查询、创建、重命名和删除功能
 - `table-management`：表头（Table Header）的查询和设置功能
 
 ### Modified Capabilities
@@ -24,5 +24,5 @@
 
 - **代码**：新增独立的管理 API 路由，不影响现有 CRUD 路由
 - **API**：新增管理端点，现有端点保持不变，无破坏性变更
-- **依赖**：直接使用已有的 `googleapis` 包，无需新增依赖
+- **依赖**：显式安装 `googleapis` 作为直接依赖（此前仅作为 `sheetsql` 的传递依赖存在）
 - **前端**：API 文档页面需要更新以包含新接口说明

@@ -8,7 +8,7 @@
 
 **Goals:**
 
-- 提供 Sheet（工作表）的列表查询、创建、删除 API
+- 提供 Sheet（工作表）的列表查询、创建、重命名、删除 API
 - 提供 Table Header（表头）的查询和设置 API
 - 复用已有的 `googleapis` 依赖和认证配置，不引入新依赖
 - 与现有 CRUD 路由共存，互不影响
@@ -18,7 +18,7 @@
 - 不提供 Google Spreadsheet 文档本身的创建/删除功能
 - 不修改 `sheetsql` 库的源码
 - 不提供列类型定义或数据验证规则的管理
-- 不提供 Sheet 重命名功能（可后续迭代）
+- 不提供 Sheet 排序或移动位置功能
 
 ## Decisions
 
@@ -39,11 +39,12 @@
 
 **选择**：新建 `src/lib/sheets-client.ts` 工具模块，直接调用 Google Sheets API v4。
 
-**理由**：`sheetsql` 是第三方库且最近未维护（v0.1.7），修改其源码不现实。`googleapis` 已作为传递依赖存在于项目中，直接使用不增加包体积。
+**理由**：`sheetsql` 是第三方库且最近未维护（v0.1.7），修改其源码不现实。`googleapis` 需显式安装为直接依赖——虽然它已作为 `sheetsql` 的传递依赖存在于 `node_modules` 中，但依赖传递依赖是反模式，不应依赖这一行为。
 
 **涉及的 API 调用**：
 - `spreadsheets.get` — 获取文档元数据（Sheet 列表）
 - `spreadsheets.batchUpdate` + `addSheet` — 创建 Sheet
+- `spreadsheets.batchUpdate` + `updateSheetProperties` — 重命名 Sheet
 - `spreadsheets.batchUpdate` + `deleteSheet` — 删除 Sheet
 - `spreadsheets.values.get` — 读取表头（第一行）
 - `spreadsheets.values.update` — 写入表头（第一行）
@@ -60,12 +61,13 @@
 |------|------|------|
 | `/api/{doc_id}/_meta/sheets` | GET | 列出所有工作表 |
 | `/api/{doc_id}/_meta/sheets` | POST | 创建新工作表 |
+| `/api/{doc_id}/_meta/sheets` | PUT | 重命名工作表 |
 | `/api/{doc_id}/_meta/sheets` | DELETE | 删除工作表 |
 | `/api/{doc_id}/_meta/{sheet_name}/headers` | GET | 查询表头 |
 | `/api/{doc_id}/_meta/{sheet_name}/headers` | POST | 设置/创建表头 |
 
 ## Risks / Trade-offs
 
-- **[风险] `googleapis` 版本兼容性** → `sheetsql` 依赖的 `googleapis` 版本可能与直接导入时存在冲突。缓解：使用 `sheetsql` 已安装的同一版本，避免单独安装。
+- **[风险] `googleapis` 版本兼容性** → 显式安装的 `googleapis` 版本可能与 `sheetsql` 内部使用的版本不一致。缓解：安装时参考 `sheetsql` 依赖的版本范围，选择兼容版本。
 - **[风险] 并发操作冲突** → 管理 API 操作（如删除 Sheet）与 CRUD 操作可能并发执行。缓解：管理操作属于低频操作，文档中说明不应在数据操作进行时执行管理操作。
 - **[权衡] 未使用 PATCH 方法更新表头** → 使用 POST 设置表头（全量覆盖），不支持部分更新。理由：表头定义通常整体变更，部分更新增加复杂度但收益有限。

@@ -38,6 +38,30 @@
 - **WHEN** 用户发送 POST 请求但未提供 `title` 字段
 - **THEN** 系统返回 400 状态码和参数错误信息
 
+### Requirement: 重命名工作表
+
+系统 SHALL 提供 PUT `/api/{doc_id}/_meta/sheets` 端点，对指定文档中的工作表进行重命名。
+
+#### Scenario: 成功重命名工作表
+
+- **WHEN** 用户向 `/api/{doc_id}/_meta/sheets` 发送 PUT 请求，请求体包含 `{ "title": "原表名", "newTitle": "新表名" }`
+- **THEN** 系统将工作表重命名并返回 200 状态码，响应包含更新后的 `sheetId` 和 `title`
+
+#### Scenario: 原工作表不存在
+
+- **WHEN** 用户请求重命名的工作表名称在文档中不存在
+- **THEN** 系统返回 404 状态码和错误信息
+
+#### Scenario: 新名称已被占用
+
+- **WHEN** 用户提供的 `newTitle` 已在文档中被其他工作表使用
+- **THEN** 系统返回 409 状态码和冲突错误信息
+
+#### Scenario: 缺少必要参数
+
+- **WHEN** 用户发送 PUT 请求但未提供 `title` 或 `newTitle` 字段
+- **THEN** 系统返回 400 状态码和参数错误信息
+
 ### Requirement: 删除工作表
 
 系统 SHALL 提供 DELETE `/api/{doc_id}/_meta/sheets` 端点，删除指定文档中的工作表。
